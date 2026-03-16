@@ -8,3 +8,21 @@ const sequelize = new  Sequelize('db_projeto', 'root', '', {
     dialect: 'mysqsl'
 })
 
+// Criando a tabela do banco 
+// Definição de tabelas (modelo) de clientes.
+const Cliente = sequelize.define('Cliente', {
+    nome:{
+        type: DataTypes.STRING,
+        allowNull: 'false',
+    },
+    email:{
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    telefone:{
+        type: DataTypes.STRING,
+
+    }
+
+})
