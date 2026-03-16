@@ -1,0 +1,10 @@
+const express = require("express")
+const cors = require("cors")
+const { Sequelize, DataTypes } = require('sequelisze')
+
+// Configuração da conexão com o banco de dados -= MySQL
+const sequelize = new  Sequelize('db_projeto', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysqsl'
+})
+
