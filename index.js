@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const { Sequelize, DataTypes } = require('sequelize')
+const req = require("express/lib/request")
 
 // Configuração da conexão com o banco de dados -= MySQL
 const sequelize = new  Sequelize('db_projeto', 'root', '', {
@@ -55,6 +56,51 @@ app.post('/clientes', async(req, res) => {
                 error: 'Erro ao cadastrar cliente. Verifique se o cliente já existe.'
             })
 
+    }
+})
+
+app.put("/clientes/:id", async (req, res) => {
+    try{
+        const { id } = req.params
+        const { nome, email, telefone } = req.body
+
+        const [ updated ] = await Cliente.update(
+            
+            //{...req.body}
+            { nome, email, telefone },
+            { where: {id: id} }
+        )
+
+        if (updated) {
+            const clienteAtualizado = await Cliente.findByPk(id)
+            return res.status(200).json({
+                message: "Cliente atualizado com sucesso.",
+                cliente: clienteAtualizado
+            })
+        }
+
+        return res.status(404).json({erro: "Cliente não encontrado. "})
+    }catch (error){
+        res.status(500).json({ erro: "Erro ao atualizar cliente. "})
+    }
+})
+
+app.delete("/clientes/:id" , async (req, res) => {
+    try{
+        const { id } = req.params
+
+        const deletado = await Cliente.destroy({
+            where: {id: id}
+        })
+
+        if (deletado) {
+            return res.status(200).json({ message: "Cliente removido com sucesso."})
+        }
+        
+            return res.status(404).json({ message: "Cliente não encontrado."})
+    } catch (error) {
+        
+            return res.status(500).json({ message: "Erro ao excluir cliente."})
     }
 })
 
